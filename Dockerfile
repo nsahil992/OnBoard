@@ -15,7 +15,6 @@ FROM alpine:latest
 
 WORKDIR /app
 
-# Correct path: no "app/" prefix here — just absolute path from build container
 COPY --from=builder /app/main .
 COPY --from=builder /app/static ./static
 COPY --from=builder /app/.env .env
