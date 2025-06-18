@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  backend:
+    container_name: onboard_backend
+    build: .
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+
+  database:
+    container_name: onboard_db
+    image: postgres:16
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+
+
+
+
