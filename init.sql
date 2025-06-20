@@ -1,6 +1,4 @@
-CREATE DATABASE employee_db;Add commentMore actions
-
-\c employee_db;
+-- init.sql
 
 CREATE TABLE IF NOT EXISTS employees (
                                          id SERIAL PRIMARY KEY,
