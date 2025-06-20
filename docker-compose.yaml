@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   backend:
     container_name: onboard_backend
@@ -9,17 +8,25 @@ services:
       - "8080:8080"
     depends_on:
       - database
+    networks:
+      - onboard_net
+    command: sh -c "sleep 5 && ./main"
 
   database:
     container_name: onboard_db
     image: postgres:16
+    restart: unless-stopped
     ports:
       - "5433:5432"
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data:rw
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - onboard_net
 
-
-
-
+networks:
+  onboard_net:
