@@ -1,7 +1,7 @@
 .DS_Store
 .env
 .idea
-postgres-data/
+onboard-data/
 secrets.yaml
 postgres-secret.yaml
 *.secret.yaml
