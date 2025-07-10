@@ -5,3 +5,13 @@ onboard-data/
 secrets.yaml
 postgres-secret.yaml
 *.secret.yaml
+terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
