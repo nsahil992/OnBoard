@@ -1,0 +1,59 @@
+---
+- name: Setup Minikube and Kubernetes on EC2
+  hosts: onboard
+  become: true
+
+  tasks:
+    - name: Update and upgrade apt packages
+      apt:
+        update_cache: yes
+        upgrade: yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - curl
+          - wget
+          - apt-transport-https
+          - ca-certificates
+          - gnupg
+          - software-properties-common
+          - conntrack
+          - socat
+        state: present
+
+    - name: Install Docker
+      shell: |
+        curl -fsSL https://get.docker.com | sh
+        usermod -aG docker ubuntu
+
+    - name: Install kubectl
+      shell: |
+        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        chmod +x kubectl
+        mv kubectl /usr/local/bin/
+
+    - name: Install Minikube
+      shell: |
+        curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        install minikube-linux-amd64 /usr/local/bin/minikube
+
+    - name: Start Minikube
+      become_user: ubuntu
+      shell: |
+        minikube start --driver=docker
+
+    - name: Enable ingress addon
+      become_user: ubuntu
+      shell: |
+        minikube addons enable ingress
+
+    - name: Create Kubernetes namespace
+      become_user: ubuntu
+      shell: |
+        kubectl create namespace onboard || true
+
+    - name: Deploy application manifests
+      become_user: ubuntu
+      shell: |
+        kubectl apply -f /home/ubuntu/onboard/manifests/ -n onboard
